@@ -13,6 +13,6 @@ const authMiddleware = require('../middleware/authMiddleware');
 router.get('/', authMiddleware, getAllUsers); // GET /api/users
 router.get('/:id', authMiddleware, getUserById); // GET /api/users/:id
 router.put('/:id', authMiddleware, updateUserProfile); // PUT /api/users/:id
-router.delete('/:id', authMiddleware, deleteUser); // DELETE /api/users/:id
+router.delete('/:id', authMiddleware, deleteUser); // DELETE /api/users/:i
 
 module.exports = router;
