@@ -336,11 +336,18 @@ exports.resendVerificationEmail = async (req, res) => {
       });
     }
 
-    // ⏱️ Check if OTP was recently sent (within 60 seconds)
-    if (user.verifyTokenExpires && Date.now() < user.verifyTokenExpires - (9 * 60 * 1000)) {
-      return res.status(429).json({
-        msg: 'OTP already sent recently. Please wait before requesting another.'
-      });
+    // ⏱️ FIXED: Check if OTP was recently sent (within last 60 seconds)
+    // Calculate when the last OTP was generated
+    if (user.verifyTokenExpires) {
+      const lastOtpGeneratedAt = user.verifyTokenExpires - (10 * 60 * 1000);
+      const sixtySecondsAgo = Date.now() - (60 * 1000);
+
+      if (lastOtpGeneratedAt > sixtySecondsAgo) {
+        const secondsToWait = Math.ceil((lastOtpGeneratedAt - sixtySecondsAgo) / 1000);
+        return res.status(429).json({
+          msg: `Please wait ${secondsToWait} seconds before requesting another OTP.`
+        });
+      }
     }
 
     // Generate new OTP
@@ -412,7 +419,7 @@ exports.forgotPassword = async (req, res) => {
     });
 
     await transporter.sendMail({
-      from: `"Pages App" <${process.env.EMAIL_USER}>`,
+      from: `"Metro App" <${process.env.EMAIL_USER}>`,
       to: email,
       subject: 'Reset Your Password',
       html: `
