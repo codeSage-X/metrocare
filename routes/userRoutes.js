@@ -1,18 +1,18 @@
-// routes/user.js
 const express = require('express');
 const router = express.Router();
 const {
   getAllUsers,
   getUserById,
-  editUserById,
-  deleteUserById,
+  updateUserProfile,
+  deleteUser
 } = require('../controllers/userController');
+const authMiddleware = require('../middleware/authMiddleware');
 
 // Base path: /api/users
 
-router.get('/', getAllUsers);               // GET /api/users
-router.get('/:id', getUserById);            // GET /api/users/:id
-router.put('/:id', editUserById);           // PUT /api/users/:id
-router.delete('/:id', deleteUserById);      // DELETE /api/users/:id
+router.get('/', authMiddleware, getAllUsers); // GET /api/users
+router.get('/:id', authMiddleware, getUserById); // GET /api/users/:id
+router.put('/:id', authMiddleware, updateUserProfile); // PUT /api/users/:id
+router.delete('/:id', authMiddleware, deleteUser); // DELETE /api/users/:id
 
 module.exports = router;
