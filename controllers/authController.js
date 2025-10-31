@@ -172,7 +172,7 @@ exports.register = async (req, res) => {
 
       // Try to send email
       await transporter.sendMail({
-        from: `"Pages App" <${process.env.EMAIL_USER}>`,
+        from: `"Metro App" <${process.env.EMAIL_USER}>`,
         to: email,
         subject: 'Your Email Verification Code',
         html: `
